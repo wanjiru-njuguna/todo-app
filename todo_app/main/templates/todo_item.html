@@ -1,0 +1,23 @@
+<!-- <li>
+    <span hx-post="{% url 'toggle_todo' todo.id %}" hx-target="this" hx-swap="innerHTML" style="{% if todo.completed %}text-decoration: line-through;{% else %}text-decoration: none;{% endif %}">
+    {{ todo.name }}
+    </span>
+
+    <button hx-delete="{% url 'delete_todo' todo.id %}" hx-target="#todo-list" hx-swap="innerHTML">
+        Delete
+    </button>
+</li> -->
+<li style="list-style-type: none; margin-bottom: 1em; display: flex; align-items: center;" >
+    <input type="checkbox" 
+           hx-put="{% url 'toggle_todo' todo.id %}" 
+           hx-swap="outerHTML" 
+           {% if todo.completed %}checked{% endif %} >
+           
+    <span>
+        {{ todo.name }}
+    </span>
+
+    <button style="margin-left: 2rem;" hx-delete="{% url 'delete_todo' todo.id %}" hx-target="#todo-list" hx-swap="innerHTML">
+        Delete
+    </button>
+</li>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" hx-debug="true">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.js" integrity="sha384-BBDmZzVt6vjz5YbQqZPtFZW82o8QotoM7RUp5xOxV3nSJ8u2pSdtzFAbGKzTlKtg" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <h1>Todo List</h1>
+
+    <form id="todo-form" hx-post="{% url 'add_todo_item' %}" hx-target="#todo-list" hx-swap="innerHTML">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="New task" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <div id="todo-list">
+        {% include 'todo_list_items.html' %}
+    </div>
+    <!-- JavaScript to add CSRF token to HTMX requests -->
+    <script>
+        document.body.addEventListener('htmx:configRequest', function(event) {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            event.detail.headers['X-CSRFToken'] = csrfToken;
+        });
+    </script>
+    <script>
+        // Listen for HTMX afterRequest event to clear the form
+        document.body.addEventListener('htmx:afterRequest', function(event) {
+            // Clear the input field after the form is successfully submitted
+            document.querySelector('#todo-form input[name="name"]').value = '';
+        });
+    </script>
+</body>
+</html>
